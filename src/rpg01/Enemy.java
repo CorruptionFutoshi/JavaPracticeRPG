@@ -11,18 +11,18 @@ public abstract class Enemy {
 		return name + suffix;
 	}
 
-	public void Action(Character character) {
+	public void action(Ally ally) {
 		System.out.println("\r\n" + getNameWithSuffix() + "のターン！");
-		GameMaster.WaitTime(1);
-		AA(character);
+		GameMaster.waitTime(1);
+		aa(ally);
 	}
 
-	protected void AA(Character character) {
+	protected void aa(Ally ally) {
 		System.out.println(getNameWithSuffix() + "の通常攻撃！");
-		GameMaster.WaitTime(1);
-		System.out.println(getNameWithSuffix() + "は" + character.name + "にAAをした！");
-		GameMaster.WaitTime(1);
-		character.getDamage(attack);
+		GameMaster.waitTime(1);
+		System.out.println(getNameWithSuffix() + "は" + ally.name + "にAAをした！");
+		GameMaster.waitTime(1);
+		ally.getDamage(attack);
 	}
 
 	public abstract void getDamage(int damage);

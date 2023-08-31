@@ -3,7 +3,7 @@ package rpg01;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public abstract class Character {
+public abstract class Ally {
 	protected String name;
 	protected int health;
 	protected int maxHealth;
@@ -14,12 +14,12 @@ public abstract class Character {
 
 	public abstract void getDamage(int damage);
 
-	public abstract void talkPrologue(ArrayList<Character> characters);
+	public abstract void talkPrologue(ArrayList<Ally> allies);
 
 	public void equip(Wepon wepon) {
 		belongingWepons.add(wepon);
 		System.out.println(name + "は" + wepon.name + "を装備しました。");
-		GameMaster.WaitTime(1);
+		GameMaster.waitTime(1);
 		attack += wepon.bonusAttack;
 		health += wepon.bonusHealth;
 		maxHealth += wepon.bonusHealth;
@@ -40,21 +40,21 @@ public abstract class Character {
 			var healAmount = maxHealth - health;
 			System.out.println(name + "の体力が" + healAmount + "回復した！");
 			health = maxHealth;
-			GameMaster.WaitTime(1);
+			GameMaster.waitTime(1);
 			System.out.println(name + "の残り体力：" + health);
 			return;
 		}
 
 		System.out.println(name + "の体力が" + heal + "回復した！");
 		health += heal;
-		GameMaster.WaitTime(1);
+		GameMaster.waitTime(1);
 		System.out.println(name + "の残り体力：" + health);
 	}
 
-	protected void AA(Enemy[] enemies) {
-		String message = "攻撃対象を数字で選択してください。\r\n";
+	protected void aa(Enemy[] enemies) {
+		var message = "攻撃対象を数字で選択してください。\r\n";
 
-		for (Enemy enemy : enemies) {
+		for (var enemy : enemies) {
 			if (enemy.health > 0) {
 				message += String.valueOf(Arrays.asList(enemies).indexOf(enemy)) + ":" + enemy.getNameWithSuffix()
 						+ " ";
@@ -62,95 +62,95 @@ public abstract class Character {
 		}
 
 		System.out.println(message);
-		int enemyIndex = 0;
-		Enemy enemy = enemies[0];
+		var enemyIndex = 0;
+		var enemy = enemies[0];
 
 		try {
 			enemyIndex = GameMaster.scanner.nextInt();
 			enemy = enemies[enemyIndex];
 		} catch (Exception ex) {
 			System.out.println("「:」前の数字を入力してください");
-			AA(enemies);
+			aa(enemies);
 		}
 
 		System.out.println(name + "は" + enemy.getNameWithSuffix() + "にAAをした！");
-		GameMaster.WaitTime(1);
+		GameMaster.waitTime(1);
 		enemy.getDamage(attack);
 	}
 
-	public void SelectCommand(ArrayList<Character> characters, Enemy[] enemies) {
+	public void selectCommand(ArrayList<Ally> allies, Enemy[] enemies) {
 		System.out.println("\r\n" + name + "のターン！");
-		GameMaster.WaitTime(1);
+		GameMaster.waitTime(1);
 		System.out.println("行うコマンドを数字で選択してください。");
-		GameMaster.WaitTime(1);
+		GameMaster.waitTime(1);
 		System.out.println("0:攻撃");
-		GameMaster.WaitTime(1);
+		GameMaster.waitTime(1);
 		System.out.println("1:逃げる");
-		GameMaster.WaitTime(1);
+		GameMaster.waitTime(1);
 		System.out.println("2:体力確認");
-		GameMaster.WaitTime(1);
+		GameMaster.waitTime(1);
 		System.out.println("3:アイテムを使う");
 
-		int number = 0;
+		var number = 0;
 
 		try {
 			number = GameMaster.scanner.nextInt();
 
 		} catch (Exception ex) {
 			System.out.println("「:」前の数字を入力してください");
-			GameMaster.WaitTime(1);
-			SelectCommand(characters, enemies);
+			GameMaster.waitTime(1);
+			selectCommand(allies, enemies);
 		}
 
-		GameMaster.WaitTime(1);
+		GameMaster.waitTime(1);
 
 		switch (number) {
 		case 0:
-			Attack(enemies);
+			attack(enemies);
 			break;
 		case 1:
 			System.out.println(name + "は逃走を試みた！");
-			GameMaster.WaitTime(1);
+			GameMaster.waitTime(1);
 			System.out.println("失敗した！");
 			break;
 		case 2:
-			for (Character character : characters) {
-				if (character.health > 0) {
-					System.out.println(character.name + "の体力:" + character.health);
-					GameMaster.WaitTime(1);
+			for (var ally : allies) {
+				if (ally.health > 0) {
+					System.out.println(ally.name + "の体力:" + ally.health);
+					GameMaster.waitTime(1);
 				} else {
-					System.out.println(character.name + "の体力:0");
-					GameMaster.WaitTime(1);
+					System.out.println(ally.name + "の体力:0");
+					GameMaster.waitTime(1);
 				}
 			}
 
-			for (Enemy enemy : enemies) {
+			for (var enemy : enemies) {
 				if (enemy.health > 0) {
 					System.out.println(enemy.getNameWithSuffix() + "の体力:" + enemy.health);
-					GameMaster.WaitTime(1);
+					GameMaster.waitTime(1);
 				} else {
 					System.out.println(enemy.getNameWithSuffix() + "の体力:0");
-					GameMaster.WaitTime(1);
+					GameMaster.waitTime(1);
 				}
 			}
 
-			SelectCommand(characters, enemies);
+			selectCommand(allies, enemies);
 			break;
 		case 3:
 			if (belongingItems.size() == 0) {
 				System.out.println("使えるアイテムがありません。");
-				SelectCommand(characters, enemies);
+				selectCommand(allies, enemies);
 				return;
 			}
 
-			for (Item item : belongingItems) {
+			for (var item : belongingItems) {
 				if (item.getStock() > 0) {
 					break;
 				}
 
 				if (belongingItems.indexOf(item) == belongingItems.size() - 1) {
 					System.out.println("使えるアイテムがありません。");
-					SelectCommand(characters, enemies);
+					selectCommand(allies, enemies);
 					return;
 				}
 			}
@@ -160,14 +160,14 @@ public abstract class Character {
 		}
 	}
 
-	public abstract void Attack(Enemy[] enemies);
+	public abstract void attack(Enemy[] enemies);
 
-	public void useItem(Enemy[] enemies, Character character) {
+	public void useItem(Enemy[] enemies, Ally ally) {
 		System.out.println("使いたいアイテムを数字で選択してください。");
 
-		for (Item item : belongingItems) {
+		for (var item : belongingItems) {
 			if (item.getStock() > 0) {
-				GameMaster.WaitTime(1);
+				GameMaster.waitTime(1);
 				System.out.println(String.valueOf(belongingItems.indexOf(item)) + ":" + item.name + "（残数："
 						+ item.getStock() + "）");
 			}
@@ -175,10 +175,10 @@ public abstract class Character {
 
 		try {
 			var itemIndex = GameMaster.scanner.nextInt();
-			belongingItems.get(itemIndex).Use(enemies, character);
+			belongingItems.get(itemIndex).use(enemies, ally);
 		} catch (Exception ex) {
 			System.out.println("「:」前の数字を入力してください");
-			useItem(enemies, character);
+			useItem(enemies, ally);
 		}
 	}
 }

@@ -5,44 +5,44 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class GameMaster {
-	private static ArrayList<Character> Party = new ArrayList<Character>();
+	private static ArrayList<Ally> party = new ArrayList<Ally>();
 	public static Scanner scanner = new Scanner(System.in);
 
 	public static void main(String[] args) {
 		System.out.println("サモナーズリフトへようこそ");
-		WaitTime(1);
+		waitTime(1);
 
-		Party.add(SelectMainCharacter());
-		WaitTime(1);
-		System.out.println("メインキャラクターとして、" + Party.get(0).name + "を選択しました。\r\n");
-		WaitTime(1);
+		party.add(selectMainAlly());
+		waitTime(1);
+		System.out.println("メインキャラクターとして、" + party.get(0).name + "を選択しました。\r\n");
+		waitTime(1);
 
-		var subCharacters = SelectSubCharacters();
-		Party.add(subCharacters.get(0));
-		Party.add(subCharacters.get(1));
-		WaitTime(1);
-		System.out.println("サブキャラクターとして、" + Party.get(1).name + "と" + Party.get(2).name + "を選択しました。");
-		WaitTime(1);
+		var subAllies = selectSubAllies();
+		party.add(subAllies.get(0));
+		party.add(subAllies.get(1));
+		waitTime(1);
+		System.out.println("サブキャラクターとして、" + party.get(1).name + "と" + party.get(2).name + "を選択しました。");
+		waitTime(1);
 
-		var wepon = SelectWepon();
-		WaitTime(1);
-		Party.get(SelectWeponGetCharacterIndex()).equip(wepon);
-		WaitTime(1);
+		var wepon = selectWepon();
+		waitTime(1);
+		party.get(selectWeponGetAllyIndex()).equip(wepon);
+		waitTime(1);
 
-		var item = SelectItem();
-		WaitTime(1);
-		Party.get(SelectItemGetCharacterIndex()).addBelongingItems(item);
-		WaitTime(1);
+		var item = selectItem();
+		waitTime(1);
+		party.get(selectItemGetAllyIndex()).addBelongingItems(item);
+		waitTime(1);
 
-		System.out.println("\r\n" + Party.get(0).name + "と" + Party.get(1).name + "と" + Party.get(2).name
+		System.out.println("\r\n" + party.get(0).name + "と" + party.get(1).name + "と" + party.get(2).name
 				+ "の愉快な旅が始まります！");
-		WaitTime(2);
+		waitTime(2);
 
-		Party.get(0).talkPrologue(new ArrayList<Character>(Arrays.asList(Party.get(1), Party.get(2))));
-		WaitTime(1);
+		party.get(0).talkPrologue(new ArrayList<Ally>(Arrays.asList(party.get(1), party.get(2))));
+		waitTime(1);
 
-		var isWin = IsWinFight();
-		WaitTime(2);
+		var isWin = isWinFight();
+		waitTime(2);
 
 		if (isWin) {
 			System.out.println("\r\n\r\nV I C T O R Y");
@@ -51,90 +51,90 @@ public class GameMaster {
 		}
 	}
 
-	private static Character SelectMainCharacter() {
+	private static Ally selectMainAlly() {
 		System.out.println("メインキャラクターを数字で選択してください。");
-		var characterList = new Character[] { new Garen(), new Rudo(), new IkarugaRuka(), new Zeus(),
+		var allies = new Ally[] { new Garen(), new Rudo(), new IkarugaRuka(), new Zeus(),
 				new NishiKyouya() };
 
-		for (Character character : characterList) {
-			WaitTime(1);
-			System.out.println(String.valueOf(Arrays.asList(characterList).indexOf(character))
-					+ ":" + character.name + " ");
+		for (var ally : allies) {
+			waitTime(1);
+			System.out.println(String.valueOf(Arrays.asList(allies).indexOf(ally))
+					+ ":" + ally.name + " ");
 		}
 
-		Character selectedCharacter;
+		Ally selectedAlly;
 
 		try {
-			var characterIndex = scanner.nextInt();
-			selectedCharacter = characterList[characterIndex];
+			var allyIndex = scanner.nextInt();
+			selectedAlly = allies[allyIndex];
 		} catch (Exception ex) {
 			System.out.println("「:」前の数字を入力してください");
-			WaitTime(1);
-			selectedCharacter = SelectMainCharacter();
+			waitTime(1);
+			selectedAlly = selectMainAlly();
 		}
 
-		return selectedCharacter;
+		return selectedAlly;
 	}
 
-	private static ArrayList<Character> SelectSubCharacters() {
+	private static ArrayList<Ally> selectSubAllies() {
 		System.out.println("1人目のサブキャラクターを数字で選択してください。");
-		var characterList = new ArrayList<Character>(
+		var allies = new ArrayList<Ally>(
 				Arrays.asList(new Garen(), new Rudo(), new IkarugaRuka(), new Zeus(), new NishiKyouya()));
 
-		for (Character character : characterList) {
-			if (character.name == Party.get(0).name) {
-				characterList.remove(character);
+		for (var ally : allies) {
+			if (ally.name == party.get(0).name) {
+				allies.remove(ally);
 				break;
 			}
 		}
 
-		for (Character character : characterList) {
-			WaitTime(1);
-			System.out.println(String.valueOf(characterList.indexOf(character)) + ":" + character.name + " ");
+		for (var ally : allies) {
+			waitTime(1);
+			System.out.println(String.valueOf(allies.indexOf(ally)) + ":" + ally.name + " ");
 		}
 
-		Character firstSelectedCharacter = new Garen();
-		var selectedCharacters = new ArrayList<Character>();
+		Ally firstSelectedAlly = new Garen();
+		var selectedAllies = new ArrayList<Ally>();
 
 		try {
-			var characterIndex = scanner.nextInt();
-			firstSelectedCharacter = characterList.get(characterIndex);
-			selectedCharacters.add(firstSelectedCharacter);
+			var allyIndex = scanner.nextInt();
+			firstSelectedAlly = allies.get(allyIndex);
+			selectedAllies.add(firstSelectedAlly);
 		} catch (Exception ex) {
 			System.out.println("「:」前の数字を入力してください");
-			WaitTime(1);
-			selectedCharacters = SelectSubCharacters();
+			waitTime(1);
+			selectedAllies = selectSubAllies();
 		}
 
 		System.out.println("2人目のサブキャラクターを数字で選択してください。");
-		characterList.remove(firstSelectedCharacter);
+		allies.remove(firstSelectedAlly);
 
-		for (Character character : characterList) {
-			WaitTime(1);
-			System.out.println(String.valueOf(characterList.indexOf(character)) + ":" + character.name + " ");
+		for (var ally : allies) {
+			waitTime(1);
+			System.out.println(String.valueOf(allies.indexOf(ally)) + ":" + ally.name + " ");
 		}
 
 		try {
-			var characterIndex = scanner.nextInt();
-			selectedCharacters.add(characterList.get(characterIndex));
+			var allyIndex = scanner.nextInt();
+			selectedAllies.add(allies.get(allyIndex));
 		} catch (Exception ex) {
 			System.out.println("「:」前の数字を入力してください");
-			WaitTime(1);
-			selectedCharacters = SelectSubCharacters();
+			waitTime(1);
+			selectedAllies = selectSubAllies();
 		}
 
-		return selectedCharacters;
+		return selectedAllies;
 	}
 
-	private static Wepon SelectWepon() {
+	private static Wepon selectWepon() {
 		System.out.println("\r\n武器が落ちている");
-		WaitTime(1);
+		waitTime(1);
 		System.out.println("拾う武器を数字で選択してください。");
 
 		var weponList = new Wepon[] { new Umeboshi(), new ChainVest(), new Pickaxe() };
 
-		for (Wepon wepon : weponList) {
-			WaitTime(1);
+		for (var wepon : weponList) {
+			waitTime(1);
 			System.out.println(String.valueOf(Arrays.asList(weponList).indexOf(wepon))
 					+ ":" + wepon.name + " ");
 		}
@@ -146,22 +146,22 @@ public class GameMaster {
 			selectedWepon = weponList[weponIndex];
 		} catch (Exception ex) {
 			System.out.println("「:」前の数字を入力してください");
-			WaitTime(1);
-			selectedWepon = SelectWepon();
+			waitTime(1);
+			selectedWepon = selectWepon();
 		}
 
 		return selectedWepon;
 	}
 
-	private static Item SelectItem() {
+	private static Item selectItem() {
 		System.out.println("\r\nアイテムが落ちている");
-		WaitTime(1);
+		waitTime(1);
 		System.out.println("拾うアイテムを数字で選択してください。");
 
 		var itemList = new Item[] { new Portion(2), new Bomb(1), new SayonaraNoTurugi(1) };
 
-		for (Item item : itemList) {
-			WaitTime(1);
+		for (var item : itemList) {
+			waitTime(1);
 			System.out.println(String.valueOf(Arrays.asList(itemList).indexOf(item))
 					+ ":" + item.name + "（個数：" + item.getStock() + "） ");
 		}
@@ -173,89 +173,89 @@ public class GameMaster {
 			selectedItem = itemList[itemIndex];
 		} catch (Exception ex) {
 			System.out.println("「:」前の数字を入力してください");
-			WaitTime(1);
-			selectedItem = SelectItem();
+			waitTime(1);
+			selectedItem = selectItem();
 		}
 
 		return selectedItem;
 	}
 
-	private static int SelectItemGetCharacterIndex() {
+	private static int selectItemGetAllyIndex() {
 		System.out.println("アイテムを持たせるキャラクターを数字で選択してください。");
 
-		for (Character character : Party) {
-			WaitTime(1);
-			System.out.println(String.valueOf(Party.indexOf(character)) + ":" + character.name + " ");
+		for (var ally : party) {
+			waitTime(1);
+			System.out.println(String.valueOf(party.indexOf(ally)) + ":" + ally.name + " ");
 		}
 
-		int characterIndex;
+		int allyIndex;
 
 		try {
-			characterIndex = scanner.nextInt();
-			Party.get(characterIndex);
+			allyIndex = scanner.nextInt();
+			party.get(allyIndex);
 		} catch (Exception ex) {
 			System.out.println("「:」前の数字を入力してください");
-			WaitTime(1);
-			characterIndex = SelectItemGetCharacterIndex();
+			waitTime(1);
+			allyIndex = selectItemGetAllyIndex();
 		}
 
-		return characterIndex;
+		return allyIndex;
 	}
 
-	private static int SelectWeponGetCharacterIndex() {
+	private static int selectWeponGetAllyIndex() {
 		System.out.println("装備させるキャラクターを数字で選択してください。");
 
-		for (Character character : Party) {
-			WaitTime(1);
-			System.out.println(String.valueOf(Party.indexOf(character))
-					+ ":" + character.name + " ");
+		for (var ally : party) {
+			waitTime(1);
+			System.out.println(String.valueOf(party.indexOf(ally))
+					+ ":" + ally.name + " ");
 		}
 
-		int characterIndex;
+		int allyIndex;
 
 		try {
-			characterIndex = scanner.nextInt();
-			Party.get(characterIndex);
+			allyIndex = scanner.nextInt();
+			party.get(allyIndex);
 		} catch (Exception ex) {
 			System.out.println("「:」前の数字を入力してください");
-			WaitTime(1);
-			characterIndex = SelectWeponGetCharacterIndex();
+			waitTime(1);
+			allyIndex = selectWeponGetAllyIndex();
 		}
 
-		return characterIndex;
+		return allyIndex;
 	}
 
-	private static boolean IsWinFight() {
-		var enemies = CreateEnemies();
+	private static boolean isWinFight() {
+		var enemies = createEnemies();
 		System.out.println("");
 
-		for (Enemy enemy : enemies) {
+		for (var enemy : enemies) {
 			System.out.println(enemy.getNameWithSuffix() + "が現れた");
-			GameMaster.WaitTime(1);
+			GameMaster.waitTime(1);
 		}
 
 		System.out.println("どうする？");
 
-		while (!IsCharactersAnnihilation(Party)) {
-			WaitTime(1);
+		while (!isAlliesAnnihilation(party)) {
+			waitTime(1);
 
-			for (Character character : Party) {
-				if (character.health > 0) {
-					character.SelectCommand(Party, enemies);
-					WaitTime(1);
+			for (var ally : party) {
+				if (ally.health > 0) {
+					ally.selectCommand(party, enemies);
+					waitTime(1);
 
-					if (IsEnemiesAnnihilation(enemies)) {
+					if (isEnemiesAnnihilation(enemies)) {
 						return true;
 					}
 				}
 			}
 
-			for (Enemy enemy : enemies) {
+			for (var enemy : enemies) {
 				if (enemy.health > 0) {
-					enemy.Action(Party.get(getAttackTargetIndex()));
-					WaitTime(1);
+					enemy.action(party.get(getAttackTargetIndex()));
+					waitTime(1);
 
-					if (IsCharactersAnnihilation(Party)) {
+					if (isAlliesAnnihilation(party)) {
 						return false;
 					}
 				}
@@ -265,8 +265,8 @@ public class GameMaster {
 		return false;
 	}
 
-	private static boolean IsEnemiesAnnihilation(Enemy[] enemies) {
-		for (Enemy enemy : enemies) {
+	private static boolean isEnemiesAnnihilation(Enemy[] enemies) {
+		for (var enemy : enemies) {
 			if (enemy.health > 0) {
 				break;
 			}
@@ -279,13 +279,13 @@ public class GameMaster {
 		return false;
 	}
 
-	private static boolean IsCharactersAnnihilation(ArrayList<Character> characters) {
-		for (Character character : characters) {
-			if (character.health > 0) {
+	private static boolean isAlliesAnnihilation(ArrayList<Ally> allies) {
+		for (var ally : allies) {
+			if (ally.health > 0) {
 				break;
 			}
 
-			if (characters.indexOf(character) == characters.size() - 1) {
+			if (allies.indexOf(ally) == allies.size() - 1) {
 				return true;
 			}
 		}
@@ -294,28 +294,28 @@ public class GameMaster {
 	}
 
 	private static int getAttackTargetIndex() {
-		var targetIndex = new java.util.Random().nextInt(Party.size() - 1);
+		var targetIndex = new java.util.Random().nextInt(party.size() - 1);
 
-		if (Party.get(targetIndex).health <= 0) {
+		if (party.get(targetIndex).health <= 0) {
 			targetIndex = getAttackTargetIndex();
 		}
 
 		return targetIndex;
 	}
 
-	private static Enemy[] CreateEnemies() {
+	private static Enemy[] createEnemies() {
 		var suffixes = new String[] { "A", "B", "C" };
 		var enemyCount = new java.util.Random().nextInt(3) + 1;
 		var enemies = new Enemy[enemyCount];
 
-		for (int i = 0; i < enemyCount; i++) {
+		for (var i = 0; i < enemyCount; i++) {
 			enemies[i] = new Matango(suffixes[i]);
 		}
 
 		return enemies;
 	}
 
-	static void WaitTime(int second) {
+	static void waitTime(int second) {
 		try {
 			Thread.sleep(second * 1000);
 		} catch (InterruptedException e) {

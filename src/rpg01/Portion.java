@@ -6,11 +6,11 @@ public class Portion extends Item {
 		name = "ポーション";
 	}
 
-	public void Use(Enemy[] enemies, Character character) {
-		System.out.println(character.name + "はポーションを飲んだ");
-		GameMaster.WaitTime(1);
-		character.getHeal(200);
-		GameMaster.WaitTime(1);
+	public void use(Enemy[] enemies, Ally ally) {
+		System.out.println(ally.name + "はポーションを飲んだ");
+		GameMaster.waitTime(1);
+		ally.getHeal(200);
+		GameMaster.waitTime(1);
 		stock -= 1;
 		System.out.println("ポーションの残数：" + stock);
 	}

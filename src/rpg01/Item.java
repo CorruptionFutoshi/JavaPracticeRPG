@@ -8,7 +8,7 @@ public abstract class Item {
 		stock = number;
 	}
 
-	public void Add(int number) {
+	public void add(int number) {
 		stock += number;
 	}
 
@@ -16,5 +16,5 @@ public abstract class Item {
 		return stock;
 	}
 
-	public abstract void Use(Enemy[] enemies, Character character);
+	public abstract void use(Enemy[] enemies, Ally ally);
 }
