@@ -82,7 +82,7 @@ public class GameMaster {
 				Arrays.asList(new Garen(), new Rudo(), new IkarugaRuka(), new Zeus(), new NishiKyouya()));
 
 		for (var ally : allies) {
-			if (ally.name == party.get(0).name) {
+			if (ally.name.equals(party.get(0).name)) {
 				allies.remove(ally);
 				break;
 			}
