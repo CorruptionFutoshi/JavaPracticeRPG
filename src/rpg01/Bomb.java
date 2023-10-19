@@ -6,10 +6,10 @@ public class Bomb extends Item {
 		name = "爆弾";
 	}
 
-	public void use(Enemy[] enemies, Ally ally) {
-		System.out.println(ally.name + "は爆弾を投げた");
+	public void use(Enemy[] enemies, Ally user) {
+		System.out.println(user.name + "は爆弾を投げた");
 		GameMaster.waitTime(1);
-		ally.getDamage(200);
+		user.getDamage(200);
 
 		for (Enemy enemy : enemies) {
 			enemy.getDamage(400);

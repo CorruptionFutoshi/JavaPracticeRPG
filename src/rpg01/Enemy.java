@@ -4,17 +4,17 @@ public abstract class Enemy {
 	protected String name;
 	protected int health;
 	protected int attack;
-	protected int deffence;
+	protected int deffence = 0;
 	protected String suffix;
 
 	public String getNameWithSuffix() {
 		return name + suffix;
 	}
 
-	public void action(Ally ally) {
+	public void action(Ally[] allies) {
 		System.out.println("\r\n" + getNameWithSuffix() + "のターン！");
 		GameMaster.waitTime(1);
-		aa(ally);
+		aa(getTarget(allies));
 	}
 
 	protected void aa(Ally ally) {
@@ -23,6 +23,16 @@ public abstract class Enemy {
 		System.out.println(getNameWithSuffix() + "は" + ally.name + "にAAをした！");
 		GameMaster.waitTime(1);
 		ally.getDamage(attack);
+	}
+
+	private Ally getTarget(Ally[] allies) {
+		var targetIndex = new java.util.Random().nextInt(allies.length - 1);
+
+		if (allies[targetIndex].health <= 0) {
+			return getTarget(allies);
+		}
+
+		return allies[targetIndex];
 	}
 
 	public abstract void getDamage(int damage);

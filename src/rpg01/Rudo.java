@@ -1,6 +1,5 @@
 package rpg01;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Rudo extends Ally {
@@ -9,9 +8,10 @@ public class Rudo extends Ally {
 		health = 9999;
 		maxHealth = 9999;
 		attack = 30;
+		skillName = "生命変換";
 	}
 
-	public void talkPrologue(ArrayList<Ally> allies) {
+	public void talkPrologue(Ally[] allies) {
 		System.out.println("\r\n　自分のパーティーに新しい人が来る。");
 		GameMaster.waitTime(2);
 		System.out.println("　そう聞いたとき、多くの者は嬉しさを感じるのではないだろうか。");
@@ -54,11 +54,11 @@ public class Rudo extends Ally {
 		GameMaster.waitTime(2);
 		System.out.println("　彼に教えようとしたときだった。");
 		GameMaster.waitTime(2);
-		System.out.println("　" + allies.get(0).name + "「す、すみません遅くなりました!」");
+		System.out.println("　" + allies[1].name + "「す、すみません遅くなりました!」");
 		GameMaster.waitTime(2);
-		System.out.println("　" + allies.get(1).name + "「き、キグラス様!　お待たせしました!」");
+		System.out.println("　" + allies[2].name + "「き、キグラス様!　お待たせしました!」");
 		GameMaster.waitTime(2);
-		System.out.println("　" + allies.get(0).name + "たちがこちらに来ていた。");
+		System.out.println("　" + allies[1].name + "たちがこちらに来ていた。");
 		GameMaster.waitTime(2);
 		System.out.println("　二人とも、俺よりもいくつか年下に見える。");
 		GameMaster.waitTime(2);
@@ -83,82 +83,39 @@ public class Rudo extends Ally {
 		System.out.println("　キグラスは首を切るように腕を動かした。\r\n");
 	}
 
-	public void attack(Enemy[] enemies) {
-		System.out.println("\r\n攻撃コマンドを数字で選択してください。");
-		GameMaster.waitTime(1);
-		System.out.println("0:通常攻撃 1:生命変換 ");
-
-		var number = 0;
-
-		try {
-			number = GameMaster.scanner.nextInt();
-		} catch (Exception ex) {
-			System.out.println("「:」前の数字を入力してください");
-			GameMaster.waitTime(1);
-			attack(enemies);
-		}
-
-		GameMaster.waitTime(1);
-
-		switch (number) {
-		case 0:
-			aa(enemies);
-			break;
-		case 1:
-			healthConversion(enemies);
-			break;
-		}
-	}
-
-	private void healthConversion(Enemy[] enemies) {
+	protected void skill(Enemy[] enemies) {
 		System.out.println("これは攻撃スキルだったのか");
 		GameMaster.waitTime(1);
-		System.out.println("固有スキル「生命変換」を発動しました。");
+		System.out.println("固有スキル「" + skillName + "」を発動しました。");
 		GameMaster.waitTime(1);
 
-		var message = "攻撃対象を数字で選択してください。\r\n";
+		System.out.println("攻撃対象を数字で選択してください。");
 
 		for (var enemy : enemies) {
 			if (enemy.health > 0) {
-				message += String.valueOf(Arrays.asList(enemies).indexOf(enemy)) + ":" + enemy.getNameWithSuffix()
-						+ " ";
+				System.out.println( String.valueOf(Arrays.asList(enemies).indexOf(enemy)) + ":" + enemy.getNameWithSuffix() + " ");
 			}
 		}
 
-		System.out.println(message);
-		var enemyIndex = 0;
-		var enemy = enemies[0];
-
-		try {
-			enemyIndex = GameMaster.scanner.nextInt();
-			enemy = enemies[enemyIndex];
-		} catch (Exception ex) {
-			System.out.println("「:」前の数字を入力してください");
-			healthConversion(enemies);
-		}
-
-		enemy.getDamage(9999 - health);
+		var targetEnemy = (Enemy) GameMaster.selectEntity(enemies);
+		targetEnemy.getDamage(maxHealth - health);
 	}
 
 	public void getDamage(int damageBeforeMitigation) {
 		var damage = damageBeforeMitigation - deffence;
 		System.out.println(name + "に" + damage + "のダメージ！");
 		GameMaster.waitTime(1);
-		System.out.println(name + "の体力が" + damage + "減少した！");
 		health -= damage;
+		System.out.println(name + "の体力が" + damage + "減少した！");
 		GameMaster.waitTime(2);
 
 		if (health <= 0) {
 			System.out.println(name + "の外皮が消えた");
+			health = 0;
 		} else {
 			System.out.println(name + "の外皮は9999なのよ");
 			GameMaster.waitTime(1);
 			System.out.println(name + "の残り体力:" + health);
 		}
-	}
-
-	public void getHeal(int heal) {
-		System.out.println(name + "の体力が" + heal + "回復した！");
-		health += heal;
 	}
 }

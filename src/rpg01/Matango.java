@@ -16,15 +16,15 @@ public class Matango extends Enemy {
 		var damage = damageBeforeMitigation - deffence;
 		System.out.println(getNameWithSuffix() + "に" + damage + "のダメージ！");
 		GameMaster.waitTime(1);
-		System.out.println(getNameWithSuffix() + "の体力が" + damage + "減少した！");
 		health -= damage;
+		System.out.println(getNameWithSuffix() + "の体力が" + damage + "減少した！");
 		GameMaster.waitTime(2);
 
-		if (health < 1) {
+		if (health <= 0) {
 			System.out.println(getNameWithSuffix() + "は消滅した！");
+			health = 0;
 		} else {
-
-			System.out.println(getNameWithSuffix() + "は邪悪な顔つきをしている");
+			System.out.println(getNameWithSuffix() + "はまだやれる顔つきをしている");
 			GameMaster.waitTime(1);
 			System.out.println(getNameWithSuffix() + "の残り体力:" + health);
 		}

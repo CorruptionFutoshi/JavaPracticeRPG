@@ -12,9 +12,5 @@ public abstract class Item {
 		stock += number;
 	}
 
-	public int getStock() {
-		return stock;
-	}
-
-	public abstract void use(Enemy[] enemies, Ally ally);
+	public abstract void use(Enemy[] enemies, Ally user);
 }
