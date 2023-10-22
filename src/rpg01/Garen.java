@@ -15,6 +15,7 @@ public class Garen extends Ally {
 		System.out.println(allies[1].name + "、それから" + allies[2].name + "と共に、今は日課の山歩きをしているところだ");
 		GameMaster.waitTime(1);
 		System.out.println(name + "、" + allies[1].name + "、" + allies[2].name + "、俺「だまっしあ！」");
+		System.out.println(name + "、" + allies[1].name + "、" + allies[2].name + "「って、なんで俺くんが！？改めまして、ありがとうございました！」");
 	}
 
 	protected void skill(Enemy[] enemies) {
